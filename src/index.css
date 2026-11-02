@@ -9,7 +9,7 @@ html {
 }
 body {
   margin: 0;
-  background: #0c0a08;
+  background: #ffffff;
   -webkit-font-smoothing: antialiased;
 }
 img {
@@ -21,7 +21,7 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 ::selection {
-  background: #b3211d;
+  background: #1f56c4;
   color: #fff;
 }
 @media (prefers-reduced-motion: reduce) {

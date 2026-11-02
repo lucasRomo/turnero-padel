@@ -1,0 +1,514 @@
+/* Piezas que usan la web y el panel: la cancha dibujada, ligas y torneos, las placas y el diálogo. */
+:root {
+  --c-tinta: #0d2347;
+  --c-gris: #536077;
+  --c-linea: #dde3eb;
+  --c-suave: #f1f4f8;
+  --c-azul: #1f56c4;
+  --c-azul-claro: #e7eefb;
+  --c-verde: #12804a;
+  --c-piso: #2f6fd6;
+  --c-piso-ocupado: #c9d2de;
+}
+
+/* ——— La cancha ——— */
+.cancha-dibujo {
+  position: relative;
+  aspect-ratio: 2 / 1;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.cancha-dibujo svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.cancha-piso {
+  fill: var(--c-piso);
+}
+.cancha-linea {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.85);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.cancha-red {
+  stroke: #fff;
+  stroke-width: 3;
+  stroke-dasharray: 2 2;
+  vector-effect: non-scaling-stroke;
+}
+.cancha-vidrio {
+  stroke: rgb(255 255 255 / 0.55);
+  stroke-width: 4;
+  vector-effect: non-scaling-stroke;
+}
+.cancha-dibujo.ocupada .cancha-piso {
+  fill: var(--c-piso-ocupado);
+}
+.cancha-dibujo.ocupada .cancha-linea,
+.cancha-dibujo.ocupada .cancha-red {
+  stroke: rgb(255 255 255 / 0.7);
+}
+.cancha-contenido {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  text-align: center;
+}
+.cancha-dibujo.ocupada .cancha-contenido {
+  color: #6b778b;
+}
+
+/* ——— Diálogo ——— */
+.dialogo {
+  border: 0;
+  border-radius: 16px;
+  padding: 0;
+  color: var(--c-tinta);
+  font-family: 'Barlow', system-ui, sans-serif;
+  font-size: 16px;
+  max-height: calc(100vh - 32px);
+  box-shadow: 0 24px 64px rgb(13 35 71 / 0.25);
+  overscroll-behavior: contain;
+}
+.dialogo::backdrop {
+  background: rgb(13 35 71 / 0.45);
+}
+.dialogo[open] {
+  animation: dialogo 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes dialogo {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+.dialogo-cuerpo {
+  padding: 18px 20px 22px;
+}
+.dialogo-cabeza {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.dialogo-cabeza h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+.dialogo .btn-icono {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--c-suave);
+  font-size: 22px;
+  cursor: pointer;
+  color: var(--c-tinta);
+}
+@media (max-width: 600px) {
+  .dialogo {
+    width: 100vw !important;
+    max-width: 100vw;
+    margin: auto 0 0;
+    border-radius: 16px 16px 0 0;
+    max-height: 92vh;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dialogo[open] {
+    animation: none;
+  }
+}
+
+/* ——— Ligas y torneos ——— */
+.comp {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.comp .oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+.comp-campeon {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--c-tinta);
+  color: #fff;
+  font-size: 18px;
+}
+.comp-barra {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.comp-pestanas {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  border-radius: 10px;
+  background: var(--c-suave);
+}
+.comp-pestanas button {
+  min-height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--c-gris);
+  cursor: pointer;
+}
+.comp-pestanas button.activa {
+  background: #fff;
+  color: var(--c-tinta);
+}
+.comp-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--c-linea);
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--c-tinta);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.comp-boton:hover {
+  border-color: var(--c-tinta);
+}
+.comp-boton-lleno {
+  background: var(--c-azul);
+  border-color: var(--c-azul);
+  color: #fff;
+}
+.comp-boton-lleno:hover {
+  background: #1847a8;
+  border-color: #1847a8;
+}
+.comp-boton-ancho {
+  width: 100%;
+  min-height: 48px;
+}
+.comp-rondas {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.comp-rondas::before {
+  content: 'Fecha';
+  align-self: center;
+  margin-right: 4px;
+  font-weight: 600;
+  color: var(--c-gris);
+}
+.comp-rondas button {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--c-linea);
+  border-radius: 50%;
+  background: #fff;
+  font: inherit;
+  font-weight: 700;
+  color: var(--c-tinta);
+  cursor: pointer;
+}
+.comp-rondas button.activa {
+  background: var(--c-tinta);
+  border-color: var(--c-tinta);
+  color: #fff;
+}
+.comp-subtitulo {
+  margin: 4px 0 0;
+  font-size: 19px;
+  font-weight: 700;
+}
+.comp-subtitulo::first-letter {
+  text-transform: uppercase;
+}
+.comp-partidos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px;
+}
+.comp-partido {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--c-suave);
+}
+.comp-partido-cuando {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: var(--c-gris);
+}
+.comp-partido-cuando strong {
+  margin-right: 6px;
+  color: var(--c-tinta);
+}
+.comp-partido-cuerpo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.comp-parejas {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  min-width: 0;
+  font-size: 16px;
+}
+.comp-parejas span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.comp-parejas .gana {
+  font-weight: 700;
+}
+.comp-parejas .falta {
+  color: var(--c-gris);
+  font-style: italic;
+}
+.comp-sets {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+}
+.comp-set {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 22px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.comp-set b {
+  font-weight: 500;
+  color: var(--c-gris);
+}
+.comp-set b.gana {
+  font-weight: 700;
+  color: var(--c-tinta);
+}
+.comp-editar {
+  margin-left: 6px;
+  padding: 4px 6px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  color: var(--c-azul);
+  cursor: pointer;
+  text-decoration: underline;
+}
+.comp-cargar {
+  display: flex;
+  gap: 6px;
+}
+.comp-cargar input {
+  width: 120px;
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--c-linea);
+  border-radius: 8px;
+  font: inherit;
+}
+.comp-tabla-marco {
+  overflow-x: auto;
+}
+.comp-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.comp-tabla th {
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-gris);
+  border-bottom: 1px solid var(--c-linea);
+}
+.comp-tabla td {
+  padding: 10px;
+  border-bottom: 1px solid var(--c-linea);
+}
+.comp-tabla .num {
+  text-align: right;
+  width: 1%;
+  white-space: nowrap;
+}
+.comp-tabla tr.clasifica td:first-child {
+  box-shadow: inset 3px 0 0 var(--c-verde);
+}
+.comp-nota {
+  margin: 0;
+  font-size: 14px;
+  color: var(--c-gris);
+}
+.comp-zonas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 24px 20px;
+}
+.comp-zona {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.comp-zona .comp-partidos {
+  grid-template-columns: 1fr;
+}
+.comp-zonas .comp-nota {
+  grid-column: 1 / -1;
+}
+.comp-cuadro {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: center;
+}
+.comp-llave {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.comp-llave .comp-partidos {
+  grid-template-columns: 1fr;
+}
+@media (max-width: 760px) {
+  .comp-cuadro,
+  .comp-zonas {
+    grid-template-columns: 1fr;
+  }
+  .comp-tabla .ancho {
+    display: none;
+  }
+  .comp-partidos {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ——— Placas ——— */
+.afiche {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 24px;
+  align-items: start;
+}
+.afiche-vista {
+  max-height: 70vh;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--c-suave);
+}
+.afiche-vista canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.afiche-opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.afiche-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-weight: 600;
+  font-size: 15px;
+}
+.afiche-campo legend {
+  padding: 0;
+  margin-bottom: 8px;
+}
+.afiche-campo select {
+  height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--c-linea);
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+  font-weight: 400;
+  color: var(--c-tinta);
+}
+.afiche-estilos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.afiche-estilos button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-gris);
+  cursor: pointer;
+}
+.afiche-muestra {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 18px;
+  outline: 1px solid var(--c-linea);
+}
+.afiche-estilos button.activo {
+  color: var(--c-tinta);
+  font-weight: 700;
+}
+.afiche-estilos button.activo .afiche-muestra {
+  outline: 3px solid var(--c-azul);
+  outline-offset: 2px;
+}
+.afiche-acciones {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+@media (max-width: 700px) {
+  .afiche {
+    grid-template-columns: 1fr;
+  }
+  .afiche-vista {
+    width: min(100%, 300px);
+  }
+}

@@ -2,6 +2,7 @@
 import { useSyncExternalStore } from 'react'
 import { negocio, precioDe } from '../config/negocio'
 import { ahoraMin, deClave, hoyClave, sumarDias } from './formato'
+import { fixtureLiga, fixtureTorneo, resolver as resolverLlave, setsAlAzar, type Competencia, type Pareja, type Sets } from './competencias'
 
 export type Metodo = 'efectivo' | 'transferencia' | 'mercadopago'
 export const metodos: Record<Metodo, string> = { efectivo: 'Efectivo', transferencia: 'Transferencia', mercadopago: 'Mercado Pago' }
@@ -40,9 +41,10 @@ export type Estado = {
   fijos: Fijo[]
   ventas: Venta[]
   solicitudes: Solicitud[]
+  competencias: Competencia[]
 }
 
-const VERSION = 3
+const VERSION = 5
 const CLAVE = 'tresmuros-demo'
 
 function azar(semilla: number) {
@@ -131,7 +133,47 @@ function generar(): Estado {
     { id: 's2', nombre: 'Gonza Funes', telefono: '351 488-7730', dow: 4, inicio: 1290, creada: hoy },
   ]
 
-  return { version: VERSION, generado: hoy, reservas, fijos, ventas, solicitudes }
+  return { version: VERSION, generado: hoy, reservas, fijos, ventas, solicitudes, competencias: competenciasDeMuestra(hoy, r) }
+}
+
+/** Dos ligas en curso y el torneo del fin de semana pasado, con resultados hasta hoy. */
+function competenciasDeMuestra(hoy: string, r: () => number): Competencia[] {
+  // Cada competencia arma sus parejas con apellidos sin repetir
+  const todos = [...apellidos, 'Gómez', 'Paz', 'Olmos', 'Villarreal', 'Ríos', 'Aguirre', 'Molina', 'Castro', 'Maldonado', 'Rojas', 'Peralta', 'Arias']
+  const parejas = (n: number, pre: string): Pareja[] => {
+    const mazo = [...todos].sort(() => r() - 0.5)
+    return Array.from({ length: n }, (_, i) => ({ id: `${pre}${i}`, nombre: `${mazo[i * 2]} / ${mazo[i * 2 + 1]}` }))
+  }
+  const jugar = (c: Competencia, hasta: string) => {
+    c.partidos = c.partidos.map((p) => (p.dia < hasta && p.a && p.b ? { ...p, sets: setsAlAzar(r) } : p))
+  }
+  const dow = deClave(hoy).getDay()
+  const sabadoPasado = sumarDias(hoy, -((dow + 1) % 7 || 7))
+
+  const liga: Competencia = { id: 'liga-primavera', nombre: 'Liga de Primavera', formato: 'liga', categoria: '7ma caballeros', parejas: [], partidos: [] }
+  liga.parejas = parejas(8, 'lp')
+  liga.partidos = fixtureLiga(liga.parejas, sumarDias(sabadoPasado, -21), 840)
+  jugar(liga, hoy)
+
+  const damas: Competencia = { id: 'liga-damas', nombre: 'Liga de Damas', formato: 'liga', categoria: '8va damas', parejas: [], partidos: [] }
+  damas.parejas = parejas(6, 'ld')
+  const miercoles = sumarDias(hoy, ((3 - dow + 7) % 7) - 14)
+  damas.partidos = fixtureLiga(damas.parejas, miercoles, 1110)
+  jugar(damas, hoy)
+
+  const torneo: Competencia = { id: 'torneo-octubre', nombre: 'Torneo del mes', formato: 'torneo', categoria: '6ta libre', parejas: [], partidos: [] }
+  torneo.parejas = parejas(12, 'tm')
+  torneo.partidos = fixtureTorneo(torneo.parejas, sabadoPasado)
+  // La llave se juega en orden: primero zonas, después cada ronda con los que pasaron
+  jugar(torneo, hoy)
+  for (const ronda of ['Cuartos', 'Semifinal', 'Final']) {
+    const resueltos = resolverLlave(torneo)
+    torneo.partidos = torneo.partidos.map((p) => {
+      const x = resueltos.find((q) => q.id === p.id)!
+      return p.ronda === ronda && x.a && x.b && p.dia < hoy ? { ...p, sets: setsAlAzar(r) } : p
+    })
+  }
+  return [liga, damas, torneo]
 }
 
 function cargar(): Estado {
@@ -198,6 +240,16 @@ export const darDeBajaFijo = (id: string) =>
     ...estado,
     fijos: estado.fijos.filter((f) => f.id !== id),
     reservas: estado.reservas.map((x) => (x.fijoId === id && x.dia >= hoyClave() && x.estado !== 'pagada' ? { ...x, estado: 'cancelada' } : x)),
+  })
+
+export const crearCompetencia = (c: Competencia) => guardar({ ...estado, competencias: [...estado.competencias, c] })
+export const borrarCompetencia = (id: string) => guardar({ ...estado, competencias: estado.competencias.filter((c) => c.id !== id) })
+export const cargarResultado = (competenciaId: string, partidoId: string, sets: Sets | undefined) =>
+  guardar({
+    ...estado,
+    competencias: estado.competencias.map((c) =>
+      c.id === competenciaId ? { ...c, partidos: c.partidos.map((p) => (p.id === partidoId ? { ...p, sets } : p)) } : c,
+    ),
   })
 
 // ——— Consultas ———

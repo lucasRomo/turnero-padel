@@ -1,16 +1,18 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useOutletContext, useSearchParams } from 'react-router-dom'
-import { BarChart3, CalendarRange, Globe, Menu, Repeat, RotateCcw, Wallet } from 'lucide-react'
+import { BarChart3, CalendarRange, Globe, Menu, Repeat, RotateCcw, Trophy, Wallet } from 'lucide-react'
 import { negocio } from '../config/negocio'
 import { ahoraMin, capital, fechaCorta, fechaLarga, hora, hoyClave, pesos, sumarDias } from '../lib/formato'
-import { actualizarReserva, estados, metodos, reiniciar, useDatos, vender, type Metodo } from '../lib/datos'
+import { actualizarReserva, estados, metodos, reiniciar, useDatos, vender, type Metodo, type Reserva } from '../lib/datos'
 import { Dialogo } from '../lib/ui'
+import { CanchaDibujo } from '../lib/cancha'
 
 type Ctx = { verReserva: (id: string) => void }
 export const usePanel = () => useOutletContext<Ctx>()
 
 const menu = [
   { a: '/admin', texto: 'Canchas del día', icono: CalendarRange, fin: true },
+  { a: '/admin/torneos', texto: 'Torneos y ligas', icono: Trophy },
   { a: '/admin/fijos', texto: 'Turnos fijos', icono: Repeat },
   { a: '/admin/caja', texto: 'Caja y cantina', icono: Wallet },
   { a: '/admin/reportes', texto: 'Reportes', icono: BarChart3 },
@@ -30,7 +32,9 @@ export function Layout() {
     <div className="admin">
       <aside className={`lateral ${abierto ? 'lateral-abierta' : ''}`}>
         <div className="producto">
-          <span className="producto-marca producto-marca-pelota" aria-hidden="true">3M</span>
+          <span className="producto-marca" aria-hidden="true">
+            <svg viewBox="0 0 28 28" width="30" height="30"><rect x="1" y="5" width="26" height="18" rx="3" fill="currentColor" /><path d="M14 5v18M6 14h16M6 5v18M22 5v18" stroke="#fff" strokeWidth="1.6" fill="none" /></svg>
+          </span>
           <span>
             <strong>{negocio.nombre}</strong>
             <small>{negocio.barrio}</small>
@@ -53,7 +57,7 @@ export function Layout() {
       </aside>
       <header className="superior">
         <button className="btn-icono solo-telefono" onClick={() => setAbierto(!abierto)} aria-label="Menú"><Menu size={20} /></button>
-        <p className="superior-texto">{capital(fechaLarga(hoyClave()))} · abierto de 8:00 a 00:30</p>
+        <p className="superior-texto">{capital(fechaLarga(hoyClave()))}, abierto de 8:00 a 00:30</p>
         <Link to="/" className="boton boton-chico">Reservar como cliente</Link>
       </header>
       <main className="hoja-admin">
@@ -108,6 +112,89 @@ function DetalleReserva({ id, cerrar }: { id: string | null; cerrar: () => void 
 
 // ——— Canchas del día ———
 
+/** Las cuatro canchas como se ven desde la cantina: quién juega ahora y cuándo se libera. */
+function AhoraEnCanchas({ verReserva }: { verReserva: (id: string) => void }) {
+  const e = useDatos()
+  const hoy = hoyClave()
+  const ahora = ahoraMin()
+  return (
+    <section aria-labelledby="ahora-titulo">
+      <h2 id="ahora-titulo" className="rail-titulo">En las canchas ahora</h2>
+      <ul className="ahora-canchas">
+        {negocio.canchas.map((c) => {
+          const delDia = e.reservas.filter((r) => r.canchaId === c.id && r.dia === hoy && r.estado !== 'cancelada')
+          const actual = delDia.find((r) => r.inicio <= ahora && ahora < r.inicio + negocio.duracion)
+          const proxima = delDia.filter((r) => r.inicio > ahora).sort((a, b) => a.inicio - b.inicio)[0]
+          const resto = actual ? actual.inicio + negocio.duracion - ahora : 0
+          const ver = actual ?? proxima
+          return (
+            <li key={c.id}>
+              <button className="ahora-cancha" disabled={!ver} onClick={() => ver && verReserva(ver.id)}>
+                <CanchaDibujo className={actual ? '' : 'ocupada'}>
+                  <span className="ahora-dentro">
+                    <strong>{c.nombre}</strong>
+                    <span>{actual ? actual.titular : 'Libre'}</span>
+                  </span>
+                </CanchaDibujo>
+                <span className="ahora-pie">
+                  {actual
+                    ? `Termina ${hora(actual.inicio + negocio.duracion)}, faltan ${resto} min`
+                    : proxima
+                      ? `Próximo: ${hora(proxima.inicio)}, ${proxima.titular.split(' ')[0]}`
+                      : 'Sin más reservas hoy'}
+                </span>
+              </button>
+            </li>
+          )
+        })}
+      </ul>
+    </section>
+  )
+}
+
+/** En el celular, una cancha por vez con sus turnos en lista. */
+function PorCancha({ delDia, dia, verReserva }: { delDia: Reserva[]; dia: string; verReserva: (id: string) => void }) {
+  const [cancha, setCancha] = useState(negocio.canchas[0].id)
+  const hoy = hoyClave()
+  const ahora = ahoraMin()
+  return (
+    <div className="por-cancha">
+      <div className="segmentos segmentos-ancho" role="tablist" aria-label="Cancha">
+        {negocio.canchas.map((c) => (
+          <button key={c.id} role="tab" aria-selected={cancha === c.id} className={cancha === c.id ? 'activa' : ''} onClick={() => setCancha(c.id)}>
+            {c.nombre}
+          </button>
+        ))}
+      </div>
+      <ul className="lista">
+        {negocio.turnos.map((t) => {
+          const r = delDia.find((x) => x.canchaId === cancha && x.inicio === t)
+          const pasado = dia === hoy && t + negocio.duracion <= ahora
+          return (
+            <li key={t}>
+              {r ? (
+                <button onClick={() => verReserva(r.id)}>
+                  <span className="lista-hora">{hora(t)}</span>
+                  <span className="lista-texto">
+                    {r.titular}
+                    <small>{r.origen === 'fijo' ? 'Turno fijo' : estados[r.estado]}</small>
+                  </span>
+                  <span className={`estado estado-${r.estado}`}>{r.estado === 'pagada' ? 'Pagada' : pesos(r.precio - r.seña)}</span>
+                </button>
+              ) : (
+                <p className="lista-libre">
+                  <span className="lista-hora">{hora(t)}</span>
+                  <span className="tenue">{pasado ? 'Pasó sin reserva' : 'Libre'}</span>
+                </p>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
 export function Canchas() {
   const e = useDatos()
   const { verReserva } = usePanel()
@@ -135,7 +222,7 @@ export function Canchas() {
       <div className="titulo-fila">
         <div>
           <h1>Canchas del día</h1>
-          <p>{capital(fechaLarga(dia))} · {d.delDia.length} reservas de {negocio.canchas.length * negocio.turnos.length} turnos</p>
+          <p>{capital(fechaLarga(dia))}: {d.delDia.length} reservas de {negocio.canchas.length * negocio.turnos.length} turnos</p>
         </div>
         <div className="segmentos">
           {semana.map((x) => (
@@ -153,13 +240,16 @@ export function Canchas() {
         <div className="kpi"><span>Sin seña</span><strong className={d.sinSeña.length ? 'mal' : ''}>{d.sinSeña.length}</strong><small>reservas de hoy en adelante</small></div>
       </div>
 
+      {dia === hoy && <AhoraEnCanchas verReserva={verReserva} />}
+
       <div className="grilla-rail">
         <section className="tarjeta">
-          <div className="tarjeta-cabeza">
+          <PorCancha delDia={d.delDia} dia={dia} verReserva={verReserva} />
+          <div className="tarjeta-cabeza solo-ancho">
             <h2>Grilla</h2>
             <Link className="enlace-chico" to="/">Las canchas libres se ven en la web</Link>
           </div>
-          <div className="grilla-canchas" style={{ ['--turnos' as string]: negocio.turnos.length }}>
+          <div className="grilla-canchas solo-ancho" style={{ ['--turnos' as string]: negocio.turnos.length }}>
             <span />
             {negocio.turnos.map((t) => <span key={t} className="grilla-hora">{hora(t)}</span>)}
             {negocio.canchas.map((c) => (

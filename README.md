@@ -3,10 +3,15 @@
 Demo visual de un sistema de reservas de canchas. **Tres Muros Pádel** es un club inventado para la demo.
 Es todo frontend: los datos de prueba se generan solos y se guardan en el navegador.
 
-- **Web pública** (`#/`): un tablero tipo aeropuerto con las canchas libres en vivo, reserva con seña simulada de
-  Mercado Pago, actividades, tarifas y pedido de turno fijo.
-- **Panel del club** (`#/admin`): grilla de canchas del día, señas pendientes, turnos fijos y pedidos desde la web,
-  caja y cantina, reportes con mapa de calor de ocupación.
+- **Web pública** (`#/`): reservar mirando las canchas: se elige día y hora, y las cuatro canchas aparecen dibujadas
+  desde arriba, libres u ocupadas. Seña simulada de Mercado Pago, torneos y ligas, precios, clases y turno fijo.
+- **Torneos y ligas** (`#/competencia/<id>`): fixture por fecha como en el fútbol, tabla de posiciones (3 puntos por
+  partido ganado, desempata sets y games), torneos con zonas y cuadro hasta la final. Cada fecha, tabla o cuadro se
+  comparte como placa lista para WhatsApp o Instagram: cuatro diseños, formato publicación o historia, se dibuja en el
+  navegador y se manda con el menú de compartir del teléfono.
+- **Panel del club** (`#/admin`): quién está jugando en cada cancha ahora, grilla del día (en el celular, una cancha por
+  vez), señas pendientes, torneos y ligas (armar el fixture, cargar resultados, compartir), turnos fijos, caja y cantina,
+  y reportes con mapa de calor de ocupación.
 
 Lo que se reserva en la web aparece en el panel. **Reiniciar demo** vuelve todo a cero.
 

@@ -1,65 +1,69 @@
-/* Web pública: el complejo vestido de tablero de partidas, en negro y amarillo pelota. */
+/* Tres Muros: la web del club como una app de reservas. Blanco, el azul del césped de la cancha
+   y el azul noche del club; el amarillo de la pelota solo en las placas. */
 .sitio {
-  --bg: #0c0a08;
-  --surface: #181512;
-  --surface-2: #231f1b;
-  --ink: #ffffff;
-  --muted: #a8a29b;
-  --accent: #d9f03f;
-  --accent-ink: #0c0a08;
-  --margen: clamp(16px, 2.2vw, 32px);
-  --step-small: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
-  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
-  --step-lead: clamp(1.375rem, 1.1rem + 1vw, 2rem);
-  --step-head: clamp(2.5rem, 1.2rem + 5vw, 5.5rem);
-  --step-display: clamp(4.5rem, 1rem + 13vw, 12.5rem);
+  --fondo: #ffffff;
+  --suave: #f1f4f8;
+  --tinta: #0d2347;
+  --gris: #536077;
+  --linea: #dde3eb;
+  --azul: #1f56c4;
+  --azul-hover: #1847a8;
+  --azul-claro: #e7eefb;
+  --verde: #12804a;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --margen: max(16px, calc((100vw - 1080px) / 2));
 
-  background: var(--bg);
-  color: var(--ink);
-  font-family: 'Epilogue', system-ui, sans-serif;
-  font-size: var(--step-body);
+  min-height: 100vh;
+  background: var(--fondo);
+  color: var(--tinta);
+  font-family: 'Barlow', system-ui, sans-serif;
+  font-size: 17px;
   line-height: 1.5;
 }
 .sitio h1,
 .sitio h2,
 .sitio h3 {
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  line-height: 0.9;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+.sitio p {
   margin: 0;
 }
 .sitio a {
   color: inherit;
 }
 .sitio :focus-visible {
-  outline: 3px solid var(--accent);
-  outline-offset: 3px;
+  outline: 2px solid var(--azul);
+  outline-offset: 2px;
 }
-.oculto {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
+.tenue {
+  color: var(--gris);
+}
+.chico {
+  font-size: 15px;
+}
+.vacio {
+  padding: 24px 0;
+  color: var(--gris);
 }
 
 .barra-demo {
   display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 10px var(--margen);
-  background: var(--surface);
-  color: var(--muted);
-  font-size: var(--step-small);
-}
-.barra-demo p {
-  margin: 0;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2px 16px;
+  padding: 8px 16px;
+  background: var(--suave);
+  color: var(--gris);
+  font-size: 14px;
+  text-align: center;
 }
 .barra-demo a {
-  color: var(--ink);
-  white-space: nowrap;
-  font-weight: 500;
+  color: var(--tinta);
+  font-weight: 600;
 }
 
 /* Botones */
@@ -67,786 +71,587 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 52px;
-  padding: 0 26px;
-  border: 0;
-  border-radius: 0;
+  gap: 8px;
+  min-height: 50px;
+  padding: 0 22px;
+  border: 1px solid transparent;
+  border-radius: 10px;
   font: inherit;
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  transition: transform 160ms var(--ease), background-color 160ms var(--ease);
+  touch-action: manipulation;
+  transition: background-color 150ms var(--ease), border-color 150ms var(--ease), transform 150ms var(--ease);
 }
-.btn:active {
-  transform: scale(0.97);
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
 }
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
 }
-.btn-acento {
-  background: var(--accent);
-  color: var(--accent-ink) !important;
-}
-.btn-acento:hover {
-  background: #e8fb6a;
-}
-.btn-chico {
-  min-height: 40px;
-  padding: 0 18px;
-}
-.btn-ancho {
-  width: 100%;
-}
-.enlace {
-  text-underline-offset: 4px;
-}
-
-/* Navegación */
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px var(--margen);
-}
-.nav-marca {
-  font-weight: 900;
-  font-size: 22px;
-  letter-spacing: -0.04em;
-  text-decoration: none;
-}
-.nav-links {
-  display: flex;
-  gap: 28px;
-}
-.nav-links a {
-  text-decoration: none;
-  color: var(--muted);
-  transition: color 160ms var(--ease);
-}
-.nav-links a:hover {
-  color: var(--ink);
-}
-
-/* Portada */
-.portada {
-  display: grid;
-  grid-template-columns: 7fr 5fr;
-  grid-template-areas:
-    'texto texto'
-    'tablero foto';
-  gap: 24px var(--margen);
-  padding: 8px var(--margen) 0;
-}
-.portada-texto {
-  grid-area: texto;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 32px;
-}
-.portada h1 {
-  font-size: var(--step-display);
-  line-height: 0.82;
-}
-.portada-texto p {
-  font-size: max(18px, var(--step-body));
-  max-width: 30ch;
-  margin: 0 0 12px;
-  color: var(--muted);
-}
-.portada-tablero {
-  grid-area: tablero;
-  min-width: 0;
-}
-.portada-foto {
-  grid-area: foto;
-  margin: 0;
-  position: relative;
-  overflow: hidden;
-  min-height: 320px;
-}
-.portada-foto img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  animation: acerca 20s ease-out both;
-}
-@keyframes acerca {
-  from {
-    transform: scale(1.12);
-  }
-}
-
-/* El tablero */
-.tablero {
-  background: var(--surface);
-  padding: 8px 20px 12px;
-}
-.tablero-dias {
-  display: flex;
-  gap: 4px;
-  overflow-x: auto;
-  padding: 8px 0 12px;
-}
-.tablero-dias button {
-  font: inherit;
-  font-size: var(--step-small);
-  font-weight: 500;
-  white-space: nowrap;
-  padding: 8px 12px;
-  min-height: 40px;
-  border: 0;
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  text-transform: capitalize;
-}
-.tablero-dias button:hover {
-  color: var(--ink);
-}
-.tablero-dias button.activa {
-  background: var(--accent);
-  color: var(--accent-ink);
-}
-.tablero table {
-  width: 100%;
-  border-collapse: collapse;
-  font-variant-numeric: tabular-nums;
-}
-.tablero th {
-  text-align: left;
-  font-weight: 500;
-  font-size: var(--step-small);
-  color: var(--muted);
-  padding: 6px 8px 8px 0;
-}
-.tablero td {
-  padding: 7px 8px 7px 0;
-  border-top: 1px solid #2b2621;
-  font-weight: 500;
-  animation: aleta 420ms var(--ease) both;
-  animation-delay: calc(var(--i) * 40ms);
-}
-@keyframes aleta {
-  from {
-    opacity: 0;
-    transform: perspective(400px) rotateX(-80deg);
-  }
-}
-.tablero-hora {
-  font-weight: 900 !important;
-  font-size: var(--step-lead);
-  letter-spacing: -0.02em;
-  color: var(--accent);
-}
-.completo .tablero-hora,
-.completo .tablero-estado {
-  color: #948e87;
-}
-.tablero-estado {
-  text-align: right;
-  white-space: nowrap;
-}
-.tablero-vacio {
-  color: var(--muted);
-  padding: 24px 0 !important;
-}
-.puertas {
-  display: flex;
-  gap: 6px;
-}
-.puerta {
-  width: 40px;
-  height: 40px;
-  border: 0;
-  font: inherit;
-  font-weight: 900;
-  background: var(--ink);
-  color: var(--bg);
-  cursor: pointer;
-  transition: background-color 120ms var(--ease), transform 120ms var(--ease);
-}
-.puerta:hover:not(:disabled) {
-  background: var(--accent);
-  transform: translateY(-2px);
-}
-.puerta:active:not(:disabled) {
-  transform: scale(0.94);
-}
-.puerta:disabled {
-  background: var(--surface-2);
-  color: #5a544e;
-  cursor: not-allowed;
-  text-decoration: line-through;
-}
-
-/* Actividades: papeletas sobre la foto */
-.actividades {
-  position: relative;
-  min-height: 96svh;
-  margin-top: clamp(96px, 12vw, 200px);
-  overflow: hidden;
-}
-.actividades > img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.actividades-texto {
-  position: relative;
-  margin-left: 18%;
-  margin-top: 10svh;
-  max-width: 560px;
-  padding: 28px 32px;
-  background: rgb(12 10 8 / 0.78);
-}
-.actividades-texto h2 {
-  font-size: var(--step-head);
-}
-.actividades-texto p {
-  font-size: var(--step-lead);
-  line-height: 1.3;
-  margin: 20px 0 0;
-}
-.papeletas {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  padding: 0 var(--margen);
-  align-items: end;
-}
-.papeleta {
-  background: #f4f1ea;
-  color: #0c0a08;
-  padding: 20px 20px 0;
-  height: var(--alto);
-  transform: rotate(var(--giro));
-  transform-origin: bottom center;
-  font-size: 16px;
-  line-height: 1.45;
-  overflow: hidden;
-}
-.papeleta h3 {
-  font-size: 22px;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-}
-.papeleta p {
-  margin: 6px 0 0;
-}
-.papeleta-corte {
-  color: #8a847c;
-  letter-spacing: 0.1em;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-/* Tarifa: el pasaje */
-.tarifa-seccion {
-  padding: clamp(96px, 12vw, 200px) var(--margen) 0;
-  display: grid;
-  place-items: center;
-}
-.pasaje {
-  width: min(1040px, 100%);
-  display: grid;
-  grid-template-columns: 7fr 3fr;
-  background: var(--accent);
-  color: var(--accent-ink);
-  position: relative;
-  -webkit-mask:
-    radial-gradient(circle at 70% 0, transparent 14px, #000 14.5px) top / 100% 51% no-repeat,
-    radial-gradient(circle at 70% 100%, transparent 14px, #000 14.5px) bottom / 100% 51% no-repeat;
-  mask:
-    radial-gradient(circle at 70% 0, transparent 14px, #000 14.5px) top / 100% 51% no-repeat,
-    radial-gradient(circle at 70% 100%, transparent 14px, #000 14.5px) bottom / 100% 51% no-repeat;
-}
-.pasaje-principal {
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 40px;
-}
-.pasaje h2 {
-  font-size: clamp(2.25rem, 1rem + 3.4vw, 4rem);
-  max-width: 10ch;
-}
-.pasaje ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px 32px;
-}
-.pasaje li {
-  display: flex;
-  flex-direction: column;
-}
-.pasaje li strong {
-  font-weight: 900;
-  font-variant-numeric: tabular-nums;
-}
-.pasaje-talon {
-  background: #c9df2f;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 40px 0 0;
-  border-left: 6px dotted var(--bg);
-}
-.pasaje-precio {
-  margin: 0;
-  padding: 0 28px;
-  font-weight: 900;
-  font-size: clamp(2.5rem, 1rem + 3.6vw, 4.5rem);
-  letter-spacing: -0.04em;
-  line-height: 0.95;
-  font-variant-numeric: tabular-nums;
-}
-.pasaje-precio small {
-  display: block;
-  font-size: var(--step-small);
-  font-weight: 500;
-  letter-spacing: 0;
-}
-.pasaje-talon .btn {
-  background: var(--accent-ink);
-  color: var(--accent) !important;
-  min-height: 56px;
-  width: auto;
-  margin: 0 28px 28px;
-}
-.pasaje-talon .btn:hover {
-  background: #2b2621;
-}
-
-/* Pasos en escalera */
-.pasos {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 56px var(--margen);
-  padding: clamp(96px, 12vw, 200px) var(--margen) 0;
-}
-.paso {
-  grid-column: var(--col) / span 6;
-}
-.paso h2,
-.paso-linea {
-  font-size: clamp(2.25rem, 1rem + 3.4vw, 4.75rem);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  margin: 0;
-}
-.paso:last-child .paso-linea {
-  color: var(--accent);
-}
-.paso p:not(.paso-linea) {
-  margin: 12px 0 0;
-  max-width: 34ch;
-  color: var(--muted);
-}
-
-.banda-foto {
-  margin: clamp(96px, 12vw, 200px) 0 0;
-  height: 70svh;
-  overflow: hidden;
-}
-.banda-foto img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Cupón del turno fijo */
-.cupon-seccion {
-  padding: clamp(96px, 10vw, 160px) var(--margen);
-  display: grid;
-  place-items: center;
-}
-.cupon {
-  width: min(1120px, 100%);
-  display: grid;
-  grid-template-columns: 46fr 54fr;
-  background: var(--ink);
-  color: var(--bg);
-  -webkit-mask:
-    radial-gradient(circle at 46% 0, transparent 14px, #000 14.5px) top / 100% 51% no-repeat,
-    radial-gradient(circle at 46% 100%, transparent 14px, #000 14.5px) bottom / 100% 51% no-repeat;
-  mask:
-    radial-gradient(circle at 46% 0, transparent 14px, #000 14.5px) top / 100% 51% no-repeat,
-    radial-gradient(circle at 46% 100%, transparent 14px, #000 14.5px) bottom / 100% 51% no-repeat;
-}
-.cupon-texto {
-  padding: 48px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 32px;
-}
-.cupon-texto h2 {
-  font-size: clamp(2rem, 1rem + 2.6vw, 3.25rem);
-  max-width: 9ch;
-}
-.cupon-texto p {
-  margin: 0;
-  max-width: 34ch;
-}
-.cupon-campos {
-  padding: 40px 48px;
-  border-left: 5px dotted var(--bg);
-  display: grid;
-  gap: 10px;
-}
-.cupon-campos input,
-.cupon-campos select {
-  width: 100%;
-  height: 52px;
-  border: 0;
-  background: #e9e5de;
-  font: inherit;
-  padding: 0 16px;
-  color: var(--bg);
-  border-radius: 0;
-}
-.cupon-enviar {
-  height: 56px;
-  border: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font: inherit;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 160ms var(--ease);
-}
-.cupon-enviar:hover {
-  background: #2b2621;
-}
-.cupon-listo {
-  align-content: center;
-}
-.cupon-listo p {
-  margin: 0;
-  font-size: var(--step-lead);
-  line-height: 1.3;
-}
-
-/* Pie */
-.pie {
-  background: var(--accent);
-  color: var(--accent-ink);
-  min-height: 90svh;
-  padding: 40px var(--margen) 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 48px;
-}
-.pie-arriba {
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: 24px;
-  font-size: 15px;
-}
-.pie-arriba p {
-  margin: 0;
-}
-.pie-contacto {
-  font-weight: 900;
-  font-size: clamp(3.25rem, 1rem + 11vw, 11rem);
-  letter-spacing: -0.05em;
-  line-height: 0.9;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: opacity 160ms var(--ease);
-}
-.pie-contacto:hover {
-  opacity: 0.8;
-}
-.pie-abajo {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 24px;
-  font-size: 14px;
-  align-items: end;
-}
-.creditos {
-  text-align: center;
-}
-
-/* Diálogo */
-.dialogo {
-  border: 0;
-  border-radius: 0;
-  padding: 0;
-  background: #f4f1ea;
-  color: #0c0a08;
-  font-family: 'Epilogue', system-ui, sans-serif;
-  max-height: calc(100vh - 32px);
-  box-shadow: 0 24px 80px rgb(0 0 0 / 0.5);
-}
-.dialogo::backdrop {
-  background: rgb(12 10 8 / 0.7);
-}
-.dialogo[open] {
-  animation: entra 240ms var(--ease, ease);
-}
-.dialogo-cuerpo {
-  padding: 24px;
-}
-.dialogo-cabeza {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-.dialogo-cabeza h2 {
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  margin: 0;
-}
-.btn-icono {
-  width: 40px;
-  height: 40px;
-  border: 0;
-  background: none;
-  font-size: 26px;
-  cursor: pointer;
-}
-.form-reserva {
-  display: grid;
-  gap: 14px;
-}
-.form-reserva label {
-  display: grid;
-  gap: 6px;
-  font-weight: 500;
-}
-.form-reserva input {
-  height: 50px;
-  padding: 0 14px;
-  font: inherit;
-  border: 2px solid #ddd8cf;
-  background: #fff;
-  border-radius: 0;
-}
-.form-reserva input:focus {
-  border-color: #0c0a08;
-  outline: none;
-}
-.resumen {
-  margin: 0;
-  padding: 14px 16px;
-  background: #e9e5de;
-}
-.pago {
-  display: grid;
-  gap: 6px;
-}
-.pago small {
-  color: #5d5851;
+.btn-primario {
+  background: var(--azul);
+  color: #fff;
+}
+.btn-primario:hover:not(:disabled) {
+  background: var(--azul-hover);
+}
+.btn-secundario {
+  background: var(--fondo);
+  border-color: var(--linea);
+  color: var(--tinta);
+}
+.btn-secundario:hover {
+  border-color: var(--tinta);
 }
 .btn-mp {
   background: #009ee3;
   color: #fff;
 }
-.btn-mp:hover {
-  background: #008ac6;
+
+/* Cabecera */
+.cabecera {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 60px;
+  padding: 0 var(--margen);
+  background: var(--fondo);
+  border-bottom: 1px solid var(--linea);
 }
-.pago-ok {
-  margin: 0;
-  padding: 14px 16px;
-  background: #dff3e7;
-  color: #145c36;
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 18px;
+  text-decoration: none;
+}
+.marca-icono {
+  color: var(--azul);
+  display: flex;
+}
+.cabecera-menu {
+  display: flex;
+  gap: 28px;
+  margin-left: auto;
+  font-weight: 600;
+}
+.cabecera-menu a {
+  text-decoration: none;
+  color: var(--gris);
+}
+.cabecera-menu a:hover {
+  color: var(--tinta);
+}
+.volver {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-left: -10px;
+  border-radius: 50%;
+}
+.volver:hover {
+  background: var(--suave);
+}
+
+/* Portada */
+.portada {
+  position: relative;
+  max-width: 1080px;
+  margin: 24px auto 0;
+  border-radius: 16px;
+  overflow: hidden;
+  color: #fff;
+  background: var(--tinta);
+}
+.portada img {
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+  opacity: 0.58;
+}
+.portada-texto {
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 28px;
+}
+.portada h1 {
+  font-size: clamp(2.2rem, 1.6rem + 2.4vw, 3.4rem);
+}
+.portada-texto p {
+  margin-top: 8px;
+  font-size: 19px;
   font-weight: 500;
+  max-width: 42ch;
 }
-.embarque dl {
+
+/* Secciones */
+.reservar,
+.torneos,
+.club,
+.competencia-pagina {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 48px 16px 16px;
+}
+.seccion-cabeza {
+  margin-bottom: 24px;
+}
+.seccion-cabeza h1 {
+  font-size: clamp(2rem, 1.6rem + 1.6vw, 2.8rem);
+}
+.seccion-cabeza h2 {
+  font-size: 30px;
+}
+.seccion-cabeza p {
+  margin-top: 6px;
+  color: var(--gris);
+  max-width: 62ch;
+}
+
+/* Días y horarios */
+.dias {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.dias button,
+.horarios button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+  background: var(--fondo);
+  font: inherit;
+  color: var(--tinta);
+  cursor: pointer;
+  line-height: 1.2;
+}
+.dias button span {
+  font-size: 14px;
+  color: var(--gris);
+}
+.dias button strong {
+  font-size: 22px;
+}
+.horarios {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 6px;
+  margin-top: 14px;
+}
+.horarios button strong {
+  font-size: 19px;
+  font-variant-numeric: tabular-nums;
+}
+.horarios button span {
+  font-size: 13px;
+  color: var(--verde);
+  font-weight: 600;
+}
+.dias button:hover,
+.horarios button:hover:not(:disabled) {
+  border-color: var(--azul);
+}
+.dias button.activa,
+.horarios button.activa {
+  background: var(--tinta);
+  border-color: var(--tinta);
+  color: #fff;
+}
+.dias button.activa span,
+.horarios button.activa span {
+  color: #c9d4e8;
+}
+.horarios button:disabled {
+  background: var(--suave);
+  border-color: var(--suave);
+  color: var(--gris);
+  cursor: not-allowed;
+}
+.horarios button:disabled span {
+  color: var(--gris);
+  font-weight: 400;
+}
+
+/* Las canchas */
+.canchas {
+  margin-top: 28px;
+}
+.canchas-titulo {
+  font-weight: 600;
+  margin-bottom: 12px !important;
+}
+.canchas-grilla {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  margin: 0;
-  padding: 20px;
-  background: var(--accent, #d9f03f);
 }
-.embarque dt {
-  font-size: 14px;
+.cancha {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
 }
-.embarque dd {
-  margin: 0;
-  font-weight: 900;
-  font-size: 20px;
-  letter-spacing: -0.02em;
+.cancha:disabled {
+  cursor: not-allowed;
 }
-.embarque dd.grande {
-  font-size: 48px;
+.cancha .cancha-dibujo {
+  transition: transform 160ms var(--ease);
+}
+.cancha.libre:hover .cancha-dibujo {
+  transform: scale(1.015);
+}
+.cancha-numero {
+  font-size: 40px;
+  font-weight: 700;
   line-height: 1;
 }
-.embarque > p {
-  margin: 16px 0;
-}
-.embarque .acciones {
+.cancha-pie {
   display: flex;
-  gap: 20px;
+  justify-content: space-between;
   align-items: center;
+  gap: 12px;
+}
+.cancha-pie strong {
+  display: block;
+}
+.cancha-pie small {
+  color: var(--gris);
+  font-size: 15px;
+}
+.cancha-estado {
+  flex: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+}
+.cancha.libre .cancha-estado {
+  background: var(--azul);
+  color: #fff;
+}
+.cancha.ocupada .cancha-estado {
+  background: var(--suave);
+  color: var(--gris);
+}
+
+/* Formularios */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 15px;
+}
+.form input,
+.form select {
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+  background: var(--fondo);
+  font: inherit;
+  font-weight: 400;
+  color: var(--tinta);
+}
+.form input:focus,
+.form select:focus {
+  outline: 2px solid var(--azul);
+  outline-offset: -1px;
+}
+.form-fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.form-resumen {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--suave);
+}
+.pago-ok {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #e3f4ea;
+  color: #0c5c34;
+  font-weight: 600;
+}
+.hecha {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.hecha .cancha-dibujo {
+  max-width: 260px;
+}
+.datos-lista {
+  margin: 0;
+}
+.datos-lista div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--linea);
+}
+.datos-lista dt {
+  color: var(--gris);
+}
+.datos-lista dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+.acciones {
+  display: flex;
   flex-wrap: wrap;
+  gap: 8px;
+}
+.acciones .btn {
+  flex: 1;
 }
 
-/* Entradas */
-@keyframes entra {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
+/* Torneos */
+.torneos-lista {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 12px;
 }
-.js .revela {
-  opacity: 0;
-  translate: 0 28px;
-  transition: opacity 700ms var(--ease), translate 700ms var(--ease);
+.torneo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--suave);
+  text-decoration: none;
 }
-.js .visto .revela {
-  opacity: 1;
-  translate: 0 0;
+.torneo:hover {
+  background: var(--azul-claro);
 }
-.js .visto .revela:nth-child(2) { transition-delay: 70ms; }
-.js .visto .revela:nth-child(3) { transition-delay: 140ms; }
-.js .visto .revela:nth-child(4) { transition-delay: 210ms; }
-.js .visto .papeleta:nth-child(2) { transition-delay: 160ms; }
-.js .visto .papeleta:nth-child(3) { transition-delay: 240ms; }
-.js .visto .papeleta:nth-child(4) { transition-delay: 320ms; }
-.js .portada h1,
-.js .portada-texto p,
-.js .portada-tablero {
-  animation: entra 800ms var(--ease) both;
+.torneo-icono {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--tinta);
+  color: #fff;
 }
-.js .portada-texto p { animation-delay: 100ms; }
-.js .portada-tablero { animation-delay: 180ms; }
+.torneo-icono.liga {
+  background: var(--azul);
+}
+.torneo-texto {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.35;
+}
+.torneo-texto strong {
+  font-size: 19px;
+}
+.torneo-texto span {
+  color: var(--gris);
+  font-size: 15px;
+}
+.torneo-texto .torneo-proximo {
+  color: var(--azul);
+  font-weight: 600;
+}
+.torneo-texto .torneo-fin {
+  color: var(--tinta);
+  font-weight: 600;
+}
 
-@media (prefers-reduced-motion: reduce) {
-  .tablero td,
-  .portada-foto img,
-  .js .portada h1,
-  .js .portada-texto p,
-  .js .portada-tablero,
-  .dialogo[open] {
-    animation: none;
-  }
-  .js .revela {
-    opacity: 1;
-    translate: 0 0;
-    transition: none;
-  }
+/* El club */
+.club-grilla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.club-bloque {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px;
+  border-radius: 14px;
+  background: var(--suave);
+}
+.club-bloque h3 {
+  font-size: 21px;
+}
+.club-foto {
+  padding: 0;
+  overflow: hidden;
+}
+.club-foto img {
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+  object-fit: cover;
+}
+.precios {
+  border-collapse: collapse;
+  width: 100%;
+}
+.precios th {
+  text-align: left;
+  font-weight: 400;
+  padding: 8px 0;
+}
+.precios td {
+  text-align: right;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.precios tr + tr th,
+.precios tr + tr td {
+  border-top: 1px solid var(--linea);
+}
+.actividades {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.actividades p:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.actividades p:first-child span {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.actividades .tenue {
+  font-size: 15px;
+}
+.club .form input,
+.club .form select {
+  background: var(--fondo);
 }
 
-/* Tableta y teléfono */
-@media (max-width: 960px) {
+/* Pie */
+.pie {
+  margin-top: 56px;
+  padding: 32px var(--margen) 40px;
+  background: var(--suave);
+}
+.pie-cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 15px;
+}
+.pie-cuerpo p a + a {
+  margin-left: 20px;
+}
+.creditos {
+  margin-top: 8px !important;
+  font-size: 13px;
+  color: var(--gris);
+}
+
+@media (max-width: 760px) {
+  .cabecera-menu {
+    display: none;
+  }
   .portada {
-    grid-template-columns: 1fr;
-    grid-template-areas: 'texto' 'tablero' 'foto';
+    margin: 0;
+    border-radius: 0;
+  }
+  .portada img {
+    height: 220px;
   }
   .portada-texto {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
   }
-  .portada-foto {
-    min-height: 0;
-    aspect-ratio: 16 / 10;
+  .portada-texto p {
+    font-size: 17px;
   }
-  .nav-links {
-    display: none;
+  .reservar,
+  .torneos,
+  .club,
+  .competencia-pagina {
+    padding-top: 32px;
   }
-  .actividades {
-    min-height: 0;
+  .seccion-cabeza h2 {
+    font-size: 26px;
   }
-  .actividades > img {
-    position: relative;
-    height: 56svh;
-  }
-  .papeletas {
-    position: static;
-    grid-template-columns: 1fr 1fr;
-    padding: 12px var(--margen) 0;
-  }
-  .papeleta {
-    height: auto;
-    transform: none;
-    padding-bottom: 20px;
-  }
-  .actividades-texto {
-    margin: -80px var(--margen) 0;
-    padding: 24px;
-    background: var(--surface);
-  }
-  .pasaje,
-  .cupon {
-    grid-template-columns: 1fr;
-    -webkit-mask: none;
-    mask: none;
-  }
-  .pasaje-talon,
-  .cupon-campos {
-    border-left: 0;
-    border-top: 5px dotted var(--bg);
-  }
-  .pasaje-talon {
-    padding-top: 28px;
-    gap: 20px;
-  }
-  .pasaje ul {
-    grid-template-columns: 1fr;
-  }
-  .cupon-texto,
-  .cupon-campos {
-    padding: 28px 24px;
-  }
-  .pasos {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .paso {
-    grid-column: 1;
-    padding-left: calc((var(--col) - 1) * 3vw);
-  }
-  .pie-arriba,
-  .pie-abajo {
-    grid-template-columns: 1fr;
-  }
-  .creditos {
-    text-align: left;
-  }
-  .pie-contacto {
-    font-size: 15vw;
-  }
-}
-@media (max-width: 560px) {
-  .papeletas {
-    grid-template-columns: 1fr;
-  }
-  .barra-demo {
-    flex-direction: column;
+  .dias {
     gap: 4px;
   }
-  .solo-ancho {
-    display: none;
+  .dias button {
+    padding: 6px 0;
   }
-  .tablero {
-    padding: 4px 12px 8px;
+  .dias button span {
+    font-size: 12px;
   }
-  .puerta {
-    width: 36px;
-    height: 36px;
+  .dias button strong {
+    font-size: 19px;
+  }
+  .horarios {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .canchas-grilla {
+    gap: 14px 10px;
+  }
+  .cancha-numero {
+    font-size: 30px;
+  }
+  .cancha-pie {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .cancha-pie small {
+    font-size: 14px;
+  }
+  .cancha-estado {
+    text-align: center;
+  }
+  .club-grilla,
+  .torneos-lista {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 360px) {
+  .horarios {
+    grid-template-columns: repeat(3, 1fr);
   }
 }

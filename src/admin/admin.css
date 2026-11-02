@@ -1609,3 +1609,38 @@
     font-size: 13px;
   }
 }
+
+/* ——— Marco oscuro: el azul noche del club, con el amarillo de la pelota ——— */
+.admin {
+  --frame: #0a1d42;
+}
+.lateral,
+.superior {
+  color: #fff;
+}
+.producto small,
+.usuario small,
+.hecho-con,
+.superior-texto {
+  color: #8ea2c8;
+}
+.menu a,
+.menu-secundario {
+  color: #b9c6e0;
+}
+.menu a:hover,
+.menu-secundario:hover {
+  color: #fff;
+  background: rgb(255 255 255 / 0.08);
+}
+.menu a.active {
+  color: #0a1d42;
+  background: #e2f24b;
+  font-weight: 600;
+}
+.superior .btn-icono {
+  color: #fff;
+}
+.superior .boton {
+  color: var(--text);
+}
